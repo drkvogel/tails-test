@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 cache = {}
 
-json_data = 0
+json_data = None
 
 @app.route("/")
 def hello():
@@ -22,8 +22,17 @@ def test():
     get_config()
     print('test2', file=sys.stderr) # prints to console
     print(json_data, file=sys.stderr) # prints to console
-    # return json_data
     return "stuff"
+
+@app.route("/stores")
+def stores():
+    get_config()
+    print('/stores', file=sys.stderr) # prints to console
+    # print(json_data, file=sys.stderr) # prints to console
+    # return json_data
+    for row in json_data:
+        print("town: %s, postcode: %s" % (row['name'], row['postcode']), file=sys.stderr) # prints to console
+    return render_template('stores.html', stores=json_data)
 
 def get_config():
     global json_data # !!
