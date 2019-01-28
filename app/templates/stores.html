@@ -5,9 +5,16 @@
 {% endblock %}
 
 {% block body %}
-    <p>Stores</p>
+    <h3>Stores</h3>
     <p>
-        {{ stores }}
+        <table>
+            <tr><th>name</th><th>postcode</th></tr>
+            {{ rows|safe }}
+            <!-- {% for store in stores %}
+            <tr><td>{{ store.name }}</td><td>{{ store.postcode }}</td></tr>
+            {% endfor %} -->
+        </table>
+        <!-- {{ stores }} -->
         <!-- {{ configs|safe }} -->
     </p>
 {% endblock %}
