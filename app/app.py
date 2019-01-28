@@ -29,7 +29,7 @@ def list_stores():
     # pprint(stores) # prints sorted version of stores??
     rows = ''
     for name in sorted(stores):
-        rows = rows + "<tr><td>%s</td><td>%s</td></tr>\n" % (name, stores[name])
+        rows = rows + "<tr><td>%s</td><td>%s</td></tr>\n" % (name.replace('_', ' '), stores[name])
     return render_template('stores.html', stores=stores, rows=rows)
 
 def get_config():
