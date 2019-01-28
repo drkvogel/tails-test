@@ -3,6 +3,7 @@ from flask.json import jsonify
 import os
 import sys
 import json
+import requests
 from pprint import pprint
 
 app = Flask(__name__)
@@ -29,7 +30,21 @@ def list_stores():
     # pprint(stores) # prints sorted version of stores??
     rows = ''
     for name in sorted(stores):
-        rows = rows + "<tr><td>%s</td><td>%s</td></tr>\n" % (name.replace('_', ' '), stores[name])
+        r = requests.get('https://api.postcodes.io/postcodes/' + stores[name])
+        if r.status_code != 200:
+            print("%s: status_code: %s" % (stores[name], r.status_code), file=sys.stderr)
+            # raise Exception("r.status_code != 200")
+            lat = ''
+            lng = ''
+        else:
+            # get lat, long
+            data = json.loads(r.text)
+            result = data['result']
+            lat = result['latitude']
+            lng = result['longitude']
+            # print('https://api.postcodes.io/postcodes/%s: %s, %s' % (stores[name], lat, lng), file=sys.stderr)
+
+        rows = rows + "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n" % (name.replace('_', ' '), stores[name], lat, lng)
     return render_template('stores.html', stores=stores, rows=rows)
 
 def get_config():
